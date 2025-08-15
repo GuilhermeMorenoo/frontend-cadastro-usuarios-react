@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "../../services/api";
 import { Container, Title, Form, ContainerInputs, Input, InputLabel, } from "./styles";
 // import UsersImage from "../../assets/users.png"
@@ -9,6 +10,8 @@ function Home() {
   const inputName = useRef()
   const inputAge = useRef()
   const inputEmail = useRef()
+
+  const navigate = useNavigate()
 
   async function resgisterNewUser() {
     await api.post('/usuarios', {
@@ -45,8 +48,10 @@ function Home() {
         </div>
 
 
-        <Button type='button' onClick={resgisterNewUser}>Cadastrar Usuários</Button>
+        <Button type='button' onClick={resgisterNewUser} theme="primary">Cadastrar Usuários</Button>
       </Form>
+
+      <Button type='button' onClick={() => navigate('/lista-de-usuarios')}>Ver Usuários Cadastrados</Button>
 
     </Container>
   )
