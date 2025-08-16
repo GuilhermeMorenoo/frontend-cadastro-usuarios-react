@@ -3,7 +3,8 @@ import api from "../../services/api"
 import { useNavigate } from "react-router-dom"
 import Button from "../../components/Button"
 import TopBackground from "../../components/TopBackground"
-import { Container } from "./styles"
+import { AvatarUser, CardUsers, Container, ContainerUsers, Title, TrashIcon } from "./styles"
+import Trash from "../../assets/trash.svg"
 
 
 function ListUsers() {
@@ -17,21 +18,34 @@ function ListUsers() {
         getUsers()
     }, [])
 
+    async function deleteUsers(id) {
+        await api.delete(`/usuarios/${id}`)
+        const updatedUsers = users.filter (user => user.id !== id)
+
+        setUsers (updatedUsers)
+    }
+
     const navigate = useNavigate()
     return (
         <Container>
             <TopBackground />
-            <h1>Listagem de Usuários</h1>
+            <Title>Listagem de Usuários</Title>
 
-            {users.map((user) => (
-                <div key={user.id} >
-                    <p>{user.name}</p>
-                    <p>{user.age}</p>
-                    <p>{user.email}</p>
-                </div>
-            ))}
+            <ContainerUsers>
+                {users.map((user) => (
+                    <CardUsers key={user.id}>
+                        <AvatarUser src={`https://avatar.iran.liara.run/public?username=${user.id}`} />
+                        <div>
+                            <h3>{user.name}</h3>
+                            <p>{user.age}</p>
+                            <p>{user.email}</p>
+                        </div>
+                        <TrashIcon onClick={() => deleteUsers(user.id)} src={Trash} alt='icone-lixo' />
+                    </CardUsers>
+                ))}
+            </ContainerUsers>
 
-            <Button onClick={() => navigate('/')}>Voltar</Button>
+            <Button type="button" onClick={() => navigate('/')}>Voltar</Button>
         </Container>
     )
 }
